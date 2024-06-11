@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
-import { CreateUserDto, UserAuthDto, UserReturnDto } from 'src/dto'
+import { CreateUserDto, UserAuthDto } from 'src/dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 import { COOKIE_EXPIRY_DATE } from 'src/constants'
@@ -26,7 +26,7 @@ export class AuthController {
           message: `Email is required but was not provided by ${provider}.`,
         })
       }
-      const { accessToken, ...result } = await this.authService.validateOauthLogin(profile, provider, lang)
+      const { accessToken } = await this.authService.validateOauthLogin(profile, provider, lang)
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -72,7 +72,7 @@ export class AuthController {
   /// GOOGLE AUTH
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  async googleAuth(@Req() _req) {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
@@ -84,7 +84,7 @@ export class AuthController {
   /// GITHUB AUTH
   @Get('github')
   @UseGuards(AuthGuard('github'))
-  async githubAuth(@Req() req) {}
+  async githubAuth(@Req() _req) {}
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))

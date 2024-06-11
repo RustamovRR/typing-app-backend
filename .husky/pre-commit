@@ -1,2 +1,2 @@
 #!/bin/sh
-# pnpm prettier && npx --no-install lint-staged
+pnpm format && npx --no-install lint-staged

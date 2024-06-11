@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { User } from '@prisma/client'
 import { Strategy, Profile } from 'passport-github2'
 import { UserReturnDto } from 'src/dto'
 

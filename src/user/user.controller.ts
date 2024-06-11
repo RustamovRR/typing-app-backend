@@ -21,7 +21,7 @@ export class UserController {
 
     try {
       const decoded = this.jwtService.verify(accessToken, { secret: process.env.JWT_SECRET })
-      const { password, ...user } = await this.userService.findOneById(decoded.sub)
+      const { password: _password, ...user } = await this.userService.findOneById(decoded.sub)
       if (!user) {
         return res.status(HttpStatus.NOT_FOUND).send({ status: false, message: 'User not found' })
       }

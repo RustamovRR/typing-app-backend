@@ -16,7 +16,7 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<Omit<UserReturnDto, 'accessToken' | 'password'>> {
     const user = await this.userService.findOne(email)
     if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user
+      const { password: _password, ...result } = user
       return result
     }
     return null
