@@ -6,7 +6,9 @@ import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 import { COOKIE_EXPIRY_DATE } from 'src/constants'
 import { AuthProvidersType } from 'src/types'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('auth')
 @Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { TypingContentService } from './typing-content.service'
 import { TypingContent as TypingContentModel } from '@prisma/client'
-import { Public } from 'src/constants'
+import { ApiTags } from '@nestjs/swagger'
 
-@Public()
+@ApiTags('typing-content')
 @Controller('api/typing-content')
 export class TypingContentController {
   constructor(private readonly typingContentService: TypingContentService) {}

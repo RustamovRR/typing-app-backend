@@ -2,7 +2,9 @@ import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { UserService } from './user.service'
 import { JwtService } from '@nestjs/jwt'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('user')
 @Controller('api/user')
 export class UserController {
   constructor(
