@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TypingContent {
+  id           Int            @id @default(autoincrement())
+  title        String
+  content      String
+  createdAt    DateTime       @default(now())
+  duration     Int
+  difficulty   Difficulty
+  category     String?
+  isActive     Boolean?       @default(true)
+  updatedAt    DateTime       @default(now()) @updatedAt
+  userProgress UserProgress[]
+}
+
+model UserProgress {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  typingContentId Int
+  completedAt     DateTime?
+  accuracy        Float
+  wpm             Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  TypingContent   TypingContent @relation(fields: [typingContentId], references: [id])
+  User            User          @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([typingContentId])
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  password  String
+  provider  String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now()) @updatedAt
+  fullName  String?
+  username  String?        @unique
+  photo     String?
+  progress  UserProgress[]
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}

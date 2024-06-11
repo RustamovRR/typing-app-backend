@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: typing-app-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=typing_app_postgres
+      - POSTGRES_DB=typing-content
+    networks:
+      - typing-app-network
+    ports:
+      - "5432:5432"
+
+networks:
+  typing-app-network:
+    driver: bridge
