@@ -39,12 +39,12 @@ model UserProgress {
 model User {
   id        Int            @id @default(autoincrement())
   email     String         @unique
-  password  String
-  provider  String?
+  password  String?
+  provider  String
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now()) @updatedAt
   fullName  String?
-  username  String?        @unique
+  username  String         @unique
   photo     String?
   progress  UserProgress[]
 }

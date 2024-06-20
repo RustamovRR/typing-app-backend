@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy, Profile } from 'passport-github2'
-import { UserReturnDto } from 'src/dto'
+import { UserEntity } from 'src/user/entities'
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -17,7 +17,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   async validate(accessToken: string, refreshToken: string, profile: Profile, done: any): Promise<any> {
     const { username, emails, photos, displayName } = profile
 
-    const user: Partial<UserReturnDto> = {
+    const user: Partial<UserEntity> = {
       username,
       fullName: displayName,
       email: emails[0].value,

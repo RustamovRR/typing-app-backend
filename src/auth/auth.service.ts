@@ -2,9 +2,10 @@ import * as bcrypt from 'bcrypt'
 import { ConflictException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from 'src/user/user.service'
-import { CreateUserDto, UserAuthDto, UserReturnDto } from 'src/dto'
-import { getErrorMessage } from 'src/utils'
-import { LanguageType, AuthProvidersType } from 'src/types'
+import { getErrorMessage } from 'src/common/utils'
+import { LanguageType, AuthProvidersType } from 'src/common/types'
+import { UserEntity } from 'src/user/entities'
+import { UserRegisterDto, UserLoginDto } from 'src/user/dto'
 
 @Injectable()
 export class AuthService {
@@ -13,17 +14,17 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<Omit<UserReturnDto, 'accessToken' | 'password'>> {
-    const user = await this.userService.findOne(email)
+  async validateUser(email: string, pass: string): Promise<Omit<UserEntity, 'accessToken'>> {
+    const user = await this.userService.getUser({ email })
     if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password: _password, ...result } = user
-      return result
+      // const { password: _password, ...result } = user
+      return user
     }
     return null
   }
 
-  async login(loginDto: UserAuthDto, lang: LanguageType): Promise<UserReturnDto> {
-    const user = await this.userService.findOne(loginDto.email)
+  async login(loginDto: UserLoginDto, lang: LanguageType): Promise<UserEntity> {
+    const user = await this.userService.getUser({ email: loginDto.email })
     if (!user) {
       throw new UnauthorizedException({
         status: false,
@@ -42,21 +43,21 @@ export class AuthService {
     }
 
     const payload = { sub: user.id, email: user.email }
-    const { password, ...result } = user
+    // const { password, ...result } = user
 
     return {
-      ...result,
+      ...user,
       accessToken: await this.jwtService.signAsync(payload),
     }
   }
 
-  async register(registerDto: UserAuthDto, lang: LanguageType): Promise<any> {
+  async register(registerDto: UserRegisterDto, provider: AuthProvidersType, lang: LanguageType): Promise<any> {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10)
     try {
       const user = await this.userService.createUser({
         ...registerDto,
         password: hashedPassword,
-        provider: 'local',
+        provider,
       })
 
       const { password, ...result } = user
@@ -87,13 +88,13 @@ export class AuthService {
   }
 
   async validateOauthLogin(
-    profile: CreateUserDto,
+    profile: UserRegisterDto,
     provider: AuthProvidersType,
     lang: LanguageType,
-  ): Promise<UserReturnDto> {
+  ): Promise<UserEntity> {
     try {
       const { username, fullName, email, photo, password = '' } = profile
-      const createUserDto: CreateUserDto = {
+      const createUserDto: UserRegisterDto = {
         email: email,
         username: username || email?.split('@')[0],
         fullName: fullName,

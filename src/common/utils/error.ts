@@ -1,5 +1,5 @@
-import { ERROR_TRANSLATIONS } from 'src/constants'
-import { ERROR_TYPES, LanguageType } from 'src/types'
+import { ERROR_TRANSLATIONS } from 'src/common/constants'
+import { ERROR_TYPES, LanguageType } from 'src/common/types'
 
 export function getErrorMessage(key: keyof typeof ERROR_TYPES, lang: LanguageType) {
   return {

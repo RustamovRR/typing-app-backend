@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { User } from '@prisma/client'
 import { Strategy, VerifyCallback, Profile } from 'passport-google-oauth20'
-import { UserReturnDto } from 'src/dto'
+import { UserEntity } from 'src/user/entities'
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -23,7 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ): Promise<User | void> {
     const { username, photos, displayName, emails } = profile
 
-    const user: Partial<UserReturnDto> = {
+    const user: Partial<UserEntity> = {
       username,
       fullName: displayName,
       email: emails[0].value,

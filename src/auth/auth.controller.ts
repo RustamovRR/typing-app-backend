@@ -1,25 +1,22 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
-import { CreateUserDto, UserAuthDto } from 'src/dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
-import { COOKIE_EXPIRY_DATE } from 'src/constants'
-import { AuthProvidersType } from 'src/types'
+import { COOKIE_EXPIRY_DATE } from 'src/common/constants'
+import { AuthProvidersType } from 'src/common/types'
 import { ApiTags } from '@nestjs/swagger'
+import { getLang } from 'src/common/utils'
+import { UserLoginDto, UserRegisterDto } from 'src/user/dto'
 
 @ApiTags('auth')
 @Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  private getLang(req: Request): 'en' | 'uz' {
-    return req.headers['accept-language'] === 'en' ? 'en' : 'uz'
-  }
-
   private async handleOAuthRedirect(req: Request, res: Response, provider: AuthProvidersType) {
-    const lang = this.getLang(req)
-    const profile = req.user as CreateUserDto
+    const lang = getLang(req)
+    const profile = req.user as UserRegisterDto
     try {
       if (!profile) {
         console.warn(`${provider} callback did not provide user data.`)
@@ -44,8 +41,8 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: UserAuthDto, @Req() req: Request, @Res() res: Response) {
-    const lang = this.getLang(req)
+  async login(@Body() loginDto: UserLoginDto, @Req() req: Request, @Res() res: Response) {
+    const lang = getLang(req)
     const { accessToken } = await this.authService.login(loginDto, lang)
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
@@ -55,9 +52,9 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() registerDto: UserAuthDto, @Req() req: Request, @Res() res: Response) {
-    const lang = this.getLang(req)
-    const { accessToken, ...result } = await this.authService.register(registerDto, lang)
+  async register(@Body() registerDto: UserRegisterDto, @Req() req: Request, @Res() res: Response) {
+    const lang = getLang(req)
+    const { accessToken, ...result } = await this.authService.register(registerDto, 'local', lang)
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       maxAge: COOKIE_EXPIRY_DATE,
