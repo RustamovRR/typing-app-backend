@@ -8,8 +8,8 @@ import { getErrorMessage, getLang } from 'src/common/utils'
 import { LanguageType } from 'src/common/types'
 import { UserEntity } from './entities'
 
-@ApiTags('user')
-@Controller('api/user')
+@ApiTags('users')
+@Controller('api/users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -36,6 +36,11 @@ export class UserController {
       console.log('Token Error:', error)
       res.status(HttpStatus.FORBIDDEN).send({ status: false, message: 'Invalid or expired token' })
     }
+  }
+
+  @Get('/')
+  async users() {
+    return this.userService.getUsers({ take: 1 })
   }
 
   @Get(':id')

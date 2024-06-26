@@ -34,7 +34,7 @@ export class UserService {
     })
   }
 
-  async createUser(data: UserRegisterDto, provider: AuthProvidersType = 'local'): Promise<User> {
+  async createUser(data: UserRegisterDto, provider: AuthProvidersType = 'LOCAL'): Promise<User> {
     return this.prismaService.user.create({
       data: {
         ...data,

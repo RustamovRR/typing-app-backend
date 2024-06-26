@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { User } from '@prisma/client'
 import { Exclude } from 'class-transformer'
 import { IsOptional } from 'class-validator'
+import { AuthProvidersType } from 'src/common/types'
 
 export class UserEntity implements User {
   @ApiProperty()
@@ -15,7 +16,7 @@ export class UserEntity implements User {
   password: string
 
   @ApiProperty()
-  provider: string
+  provider: AuthProvidersType
 
   @ApiProperty()
   createdAt: Date

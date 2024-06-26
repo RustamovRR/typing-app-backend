@@ -54,7 +54,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: UserRegisterDto, @Req() req: Request, @Res() res: Response) {
     const lang = getLang(req)
-    const { accessToken, ...result } = await this.authService.register(registerDto, 'local', lang)
+    const { accessToken, ...result } = await this.authService.register(registerDto, 'LOCAL', lang)
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       maxAge: COOKIE_EXPIRY_DATE,
@@ -76,7 +76,7 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
-    return this.handleOAuthRedirect(req, res, 'google')
+    return this.handleOAuthRedirect(req, res, 'GOOGLE')
     // res.send({ message: 'User infromation from Github', user: req.user })
   }
 
@@ -88,7 +88,7 @@ export class AuthController {
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
   async githubAuthRedirect(@Req() req, @Res() res: Response) {
-    this.handleOAuthRedirect(req, res, 'github')
+    this.handleOAuthRedirect(req, res, 'GITHUB')
     // res.send({ message: 'User infromation from Github', user: req.user })
   }
 }

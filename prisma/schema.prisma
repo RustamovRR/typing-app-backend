@@ -40,12 +40,12 @@ model User {
   id        Int            @id @default(autoincrement())
   email     String         @unique
   password  String?
-  provider  String
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now()) @updatedAt
   fullName  String?
   username  String         @unique
   photo     String?
+  provider  AuthProviders
   progress  UserProgress[]
 }
 
@@ -53,4 +53,10 @@ enum Difficulty {
   EASY
   MEDIUM
   HARD
+}
+
+enum AuthProviders {
+  LOCAL
+  GOOGLE
+  GITHUB
 }
