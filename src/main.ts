@@ -2,21 +2,20 @@ import { NestFactory, Reflector } from '@nestjs/core'
 import { AppModule } from './app.module'
 import * as cookieParser from 'cookie-parser'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import { HttpExceptionFilter } from './common/filters/http-exception.filter'
-import { WrapResponseInterceptorInterceptor } from './common/interceptors/wrap-response.interceptor.interceptor'
-import { ClassSerializerInterceptor } from '@nestjs/common'
+import { TransformInterceptor } from './common/interceptors/transform.interceptor'
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, { snapshot: true })
 
   app.use(cookieParser())
   app.enableCors({
     origin: process.env.FRONT_BASE_URL,
     credentials: true,
   })
-  app.useGlobalFilters(new HttpExceptionFilter())
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
-  app.useGlobalInterceptors(new WrapResponseInterceptorInterceptor())
+  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalInterceptors(new TransformInterceptor())
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true }))
 
   const config = new DocumentBuilder()
     .setTitle('Typing app')

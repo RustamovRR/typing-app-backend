@@ -9,6 +9,8 @@ export const ERROR_TRANSLATIONS: Record<LanguageType, Record<keyof typeof ERROR_
     LOGIN_PROBLEM: 'There was a problem with your login',
     OAUTH_LOGIN_FAILURE: 'There was a problem with your social login',
     USERNAME_ALREADY_EXISTS: 'This username already exists',
+    NO_ACCESS_TOKEN: 'No access token provided',
+    INVALID_OR_EXPIRED_TOKEN: 'Invalid or expired token',
   },
   uz: {
     USER_NOT_FOUND: 'Foydalanuvchi topilmadi',
@@ -18,5 +20,7 @@ export const ERROR_TRANSLATIONS: Record<LanguageType, Record<keyof typeof ERROR_
     LOGIN_PROBLEM: 'Kirishda muammo yuz berdi',
     OAUTH_LOGIN_FAILURE: 'Ijtimoiy tarmoq orqali kirishda muammo yuz berdi',
     USERNAME_ALREADY_EXISTS: 'Ushbu username allaqachon mavjud',
+    NO_ACCESS_TOKEN: 'Kirish tokeni taqdim etilmagan',
+    INVALID_OR_EXPIRED_TOKEN: 'Yaroqsiz yoki muddati o’tgan token',
   },
 }

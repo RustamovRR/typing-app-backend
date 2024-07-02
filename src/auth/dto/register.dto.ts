@@ -1,6 +1,6 @@
 import { AuthProvidersType, EAuthProviders } from 'src/common/types'
 import { UserLoginDto } from './login.dto'
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, MinLength } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class UserRegisterDto implements UserLoginDto {
@@ -29,5 +29,5 @@ export class UserRegisterDto implements UserLoginDto {
   @IsOptional()
   @IsEnum(EAuthProviders)
   @ApiProperty()
-  provider: AuthProvidersType
+  provider?: AuthProvidersType = 'LOCAL'
 }

@@ -3,7 +3,8 @@ import { Prisma, User } from '@prisma/client'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { AuthProvidersType, LanguageType } from 'src/common/types'
 import { getErrorMessage } from 'src/common/utils'
-import { UserRegisterDto } from './dto'
+import { UserRegisterDto } from '../auth/dto'
+import { UserUpdateDto } from './dto'
 
 @Injectable()
 export class UserService {
@@ -25,23 +26,27 @@ export class UserService {
     orderBy?: Prisma.UserOrderByWithRelationInput
   }): Promise<User[]> {
     const { skip, take, cursor, where, orderBy } = params
-    return this.prismaService.user.findMany({
+    const users = await this.prismaService.user.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
     })
+
+    return users
   }
 
   async createUser(data: UserRegisterDto, provider: AuthProvidersType = 'LOCAL'): Promise<User> {
-    return this.prismaService.user.create({
+    const newUser = await this.prismaService.user.create({
       data: {
         ...data,
         username: data.email.split('@')[0],
         provider,
       },
     })
+
+    return newUser
   }
 
   async findOrCreate(data: UserRegisterDto, provider: AuthProvidersType): Promise<User> {
@@ -53,18 +58,18 @@ export class UserService {
   }
 
   async updateUser(
-    params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput },
+    params: { where: Prisma.UserWhereUniqueInput; data: UserUpdateDto },
     lang: LanguageType,
   ): Promise<User> {
     const { where, data } = params
 
-    const user = await this.getUser({ id: Number(where.id) })
+    const user = await this.getUser({ id: +where.id })
 
     if (!user) {
       throw new ConflictException({
         status: false,
-        statusCode: HttpStatus.NOT_FOUND,
-        ...getErrorMessage('USER_NOT_FOUND', lang),
+        statusCode: HttpStatus.CONFLICT,
+        ...getErrorMessage('USER_ALREADY_EXISTS', lang),
       })
     }
 
@@ -82,10 +87,12 @@ export class UserService {
       }
     }
 
-    return this.prismaService.user.update({
+    const updatedUser = await this.prismaService.user.update({
       where,
       data,
     })
+
+    return updatedUser
   }
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {

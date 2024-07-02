@@ -5,7 +5,8 @@ import { UserService } from 'src/user/user.service'
 import { getErrorMessage } from 'src/common/utils'
 import { LanguageType, AuthProvidersType } from 'src/common/types'
 import { UserEntity } from 'src/user/entities'
-import { UserRegisterDto, UserLoginDto } from 'src/user/dto'
+import { UserRegisterDto, UserLoginDto } from 'src/auth/dto'
+import { AuthEntity } from './entities'
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     return null
   }
 
-  async login(loginDto: UserLoginDto, lang: LanguageType): Promise<UserEntity> {
+  async login(loginDto: UserLoginDto, lang: LanguageType): Promise<AuthEntity> {
     const user = await this.userService.getUser({ email: loginDto.email })
     if (!user) {
       throw new UnauthorizedException({

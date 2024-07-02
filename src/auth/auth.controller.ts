@@ -5,9 +5,10 @@ import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 import { COOKIE_EXPIRY_DATE } from 'src/common/constants'
 import { AuthProvidersType } from 'src/common/types'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { getLang } from 'src/common/utils'
-import { UserLoginDto, UserRegisterDto } from 'src/user/dto'
+import { UserLoginDto, UserRegisterDto } from 'src/auth/dto'
+import { AuthEntity } from './entities'
 
 @ApiTags('auth')
 @Controller('api/auth')
@@ -41,6 +42,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOkResponse({ type: AuthEntity })
   async login(@Body() loginDto: UserLoginDto, @Req() req: Request, @Res() res: Response) {
     const lang = getLang(req)
     const { accessToken } = await this.authService.login(loginDto, lang)
