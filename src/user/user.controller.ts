@@ -9,17 +9,15 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common'
-import { Request, Response } from 'express'
-import { UserService } from './user.service'
 import { JwtService } from '@nestjs/jwt'
 import { ApiTags } from '@nestjs/swagger'
-import { User } from '@prisma/client'
-import { getErrorMessage, getLang } from 'src/common/utils'
 import { plainToInstance } from 'class-transformer'
-import { UserEntity } from './entities'
+import { Request, Response } from 'express'
+import { getErrorMessage, getLang } from 'src/common/utils'
 import { UserUpdateDto } from './dto'
+import { UserEntity } from './entities'
+import { UserService } from './user.service'
 
 @ApiTags('users')
 @Controller('api/users')

@@ -1,12 +1,12 @@
-import { NestFactory, Reflector } from '@nestjs/core'
-import { AppModule } from './app.module'
-import * as cookieParser from 'cookie-parser'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import { TransformInterceptor } from './common/interceptors/transform.interceptor'
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
+import { NestFactory, Reflector } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import * as cookieParser from 'cookie-parser'
+import { AppModule } from './app.module'
+import { TransformInterceptor } from './common/interceptors/transform.interceptor'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { snapshot: true })
+  const app = await NestFactory.create(AppModule)
 
   app.use(cookieParser())
   app.enableCors({

@@ -7,35 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TypingContent {
-  id           Int            @id @default(autoincrement())
-  title        String
-  content      String
-  createdAt    DateTime       @default(now())
-  duration     Int
-  difficulty   Difficulty
-  category     String?
-  isActive     Boolean?       @default(true)
-  updatedAt    DateTime       @default(now()) @updatedAt
-  userProgress UserProgress[]
-}
-
-model UserProgress {
-  id              Int           @id @default(autoincrement())
-  userId          Int
-  typingContentId Int
-  completedAt     DateTime?
-  accuracy        Float
-  wpm             Int
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt
-  TypingContent   TypingContent @relation(fields: [typingContentId], references: [id])
-  User            User          @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([typingContentId])
-}
-
 model User {
   id        Int            @id @default(autoincrement())
   email     String         @unique
@@ -47,6 +18,44 @@ model User {
   photo     String?
   provider  AuthProviders
   progress  UserProgress[]
+}
+
+model UserProgress {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  typingContentId Int
+  completedAt     DateTime?
+  accuracy        Float
+  wpm             Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  typingContent   TypingContent @relation(fields: [typingContentId], references: [id])
+  User            User          @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([typingContentId])
+}
+
+model TypingContent {
+  id           Int                    @id @default(autoincrement())
+  title        String
+  content      String[]
+  createdAt    DateTime               @default(now())
+  duration     Int
+  difficulty   Difficulty
+  isActive     Boolean?               @default(true)
+  updatedAt    DateTime               @default(now()) @updatedAt
+  categoryId   Int?
+  userProgress UserProgress[]
+  category     TypingContentCategory? @relation(fields: [categoryId], references: [id])
+}
+
+model TypingContentCategory {
+  id        Int             @id @default(autoincrement())
+  title     String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now()) @updatedAt
+  contents  TypingContent[]
 }
 
 enum Difficulty {

@@ -11,6 +11,8 @@ export const ERROR_TRANSLATIONS: Record<LanguageType, Record<keyof typeof ERROR_
     USERNAME_ALREADY_EXISTS: 'This username already exists',
     NO_ACCESS_TOKEN: 'No access token provided',
     INVALID_OR_EXPIRED_TOKEN: 'Invalid or expired token',
+    TYPING_CONTENT_ALREADY_EXISTS: 'This content already exists',
+    TYPING_CONTENT_CATEGORY_ALREADY_EXISTS: 'This content category already exists',
   },
   uz: {
     USER_NOT_FOUND: 'Foydalanuvchi topilmadi',
@@ -22,5 +24,7 @@ export const ERROR_TRANSLATIONS: Record<LanguageType, Record<keyof typeof ERROR_
     USERNAME_ALREADY_EXISTS: 'Ushbu username allaqachon mavjud',
     NO_ACCESS_TOKEN: 'Kirish tokeni taqdim etilmagan',
     INVALID_OR_EXPIRED_TOKEN: 'Yaroqsiz yoki muddati o’tgan token',
+    TYPING_CONTENT_ALREADY_EXISTS: 'Ushbu kontent allaqachon mavjud',
+    TYPING_CONTENT_CATEGORY_ALREADY_EXISTS: 'Ushbu kontent kategoriyasi allaqachon mavjud',
   },
 }

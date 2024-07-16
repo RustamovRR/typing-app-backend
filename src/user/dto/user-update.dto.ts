@@ -1,6 +1,5 @@
-import { AuthProvidersType, EAuthProviders } from 'src/common/types'
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, MinLength } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
+import { IsOptional } from 'class-validator'
 
 export class UserUpdateDto {
   @IsOptional()
